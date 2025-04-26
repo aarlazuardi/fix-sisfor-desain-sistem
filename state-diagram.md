@@ -11,10 +11,17 @@ stateDiagram-v2
     LoggingIn --> LoginFailed : failed
     LoginFailed --> LoggedOut : retry
 
+<<<<<<< HEAD
     LoggedIn --> Student
     LoggedIn --> Freelancer
 
     state Student {
+=======
+    LoggedIn --> Mahasiswa
+    LoggedIn --> Freelancer
+
+    state Mahasiswa {
+>>>>>>> bd9ebe384a77c79410868d5342db204afca197fb
         [*] --> Dashboard
 
         Dashboard --> CreatingProject : new project

@@ -78,7 +78,10 @@ sequenceDiagram
 ```
 
 #### Freelancer Komentar dan Upload
+<<<<<<< HEAD
 
+=======
+>>>>>>> bd9ebe384a77c79410868d5342db204afca197fb
 ```mermaid
 sequenceDiagram
   participant Freelancer
