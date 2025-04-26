@@ -1,46 +1,70 @@
 ### Use Case Diagram
 
 ```mermaid
-%% Use Case Diagram for Student & Freelancer Roles
+%% Use Case Diagram for Student & Freelancer Roles - with styled boxes
 
-%% Mermaid doesn't have native support for UML use case diagrams,
-%% so we simulate it with graph TD + subgraph and styling
+flowchart LR
+  %% Actors with custom styling
+  actorStudent["👩‍🎓 Student"]:::actor
+  actorFreelancer["💼 Freelancer"]:::actor
 
-graph TD
-  %% Actors
-  actorStudent(["👩‍🎓 Student"])
-  actorFreelancer(["💼 Freelancer"])
+  %% Add invisible spacing nodes
+  space1[" "]:::invisible
+  space2[" "]:::invisible
 
-  %% Use cases
-  login((Login))
-  signup((Sign Up))
-  manageProfile((Manage Profile))
-  createProject((Create Project))
-  viewProjects((View Projects))
-  createAssignment((Create Assignment))
-  manageBoard((Manage Kanban Board))
-  createTask((Create Task))
-  assignTask((Assign Task))
-  commentTask((Comment on Task))
-  uploadAttachment((Upload Attachment))
-  useTemplate((Use Template))
+  %% Connect invisible nodes for spacing
+  actorStudent --- space1
+  actorFreelancer --- space2
 
-  %% Relationships
-  actorStudent --> login
-  actorStudent --> signup
-  actorStudent --> manageProfile
-  actorStudent --> createAssignment
-  actorStudent --> manageBoard
-  actorStudent --> createTask
-  actorStudent --> commentTask
-  actorStudent --> uploadAttachment
-  actorStudent --> useTemplate
+  %% System boundary with added padding
+  subgraph System[" Student-Freelancer Collaboration System "]
+    direction LR
+    %% Common use cases
+    subgraph Common[" Common Functions "]
+      direction TB
+      login["Login"]:::useCase
+      signup["Sign Up"]:::useCase
+      manageProfile["Manage Profile"]:::useCase
+      commentTask["Comment on Task"]:::useCase
+      uploadAttachment["Upload Attachment"]:::useCase
+    end
 
-  actorFreelancer --> login
-  actorFreelancer --> signup
-  actorFreelancer --> manageProfile
-  actorFreelancer --> viewProjects
-  actorFreelancer --> assignTask
-  actorFreelancer --> commentTask
-  actorFreelancer --> uploadAttachment
+    %% Add spacing between subgraphs
+    middleSpace1[" "]:::invisible
+    Common --- middleSpace1 --- StudentFunctions
+
+    %% Student specific use cases
+    subgraph StudentFunctions[" Student Functions "]
+      direction TB
+      createAssignment["Create Assignment"]:::useCase
+      manageBoard["Manage Kanban Board"]:::useCase
+      createTask["Create Task"]:::useCase
+      useTemplate["Use Template"]:::useCase
+    end
+
+    %% Add spacing between subgraphs
+    middleSpace2[" "]:::invisible
+    StudentFunctions --- middleSpace2 --- FreelancerFunctions
+
+    %% Freelancer specific use cases
+    subgraph FreelancerFunctions[" Freelancer Functions "]
+      direction TB
+      viewProjects["View Projects"]:::useCase
+      assignTask["Assign Task"]:::useCase
+      createProject["Create Project"]:::useCase
+    end
+  end
+
+  %% Relationships with cleaner layout (using space nodes)
+  space1 --> StudentFunctions
+  space1 --> Common
+
+  space2 --> Common
+  space2 --> FreelancerFunctions
+
+  %% Custom styling
+  classDef actor fill:#f9f,stroke:#333,stroke-width:2px
+  classDef useCase fill:#e1f5fe,stroke:#01579b,stroke-width:1px,rx:10px,ry:10px
+  classDef system fill:#f5f5f5,stroke:#616161,stroke-width:1px,stroke-dasharray: 5 5,padding:15px
+  classDef invisible fill:none,stroke:none,opacity:0
 ```
