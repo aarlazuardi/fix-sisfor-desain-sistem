@@ -1,6 +1,14 @@
 ### Class Diagram
 
 ```mermaid
+
+---
+config:
+  theme: neo
+  look: neo
+  layout: elk
+---
+
 classDiagram
   class User {
     +String id
