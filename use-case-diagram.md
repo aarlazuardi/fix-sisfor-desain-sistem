@@ -1,6 +1,12 @@
 ### Use Case Diagram
 
 ```mermaid
+---
+config:
+  layout: elk
+  look: neo
+  theme: neo
+---
 %% Use Case Diagram for Student & Freelancer Roles - with styled boxes
 
 flowchart LR
