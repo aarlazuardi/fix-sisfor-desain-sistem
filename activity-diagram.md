@@ -5,7 +5,7 @@
 config:
   layout: elk
   look: neo
-  theme: neo
+  theme: default
 ---
 %% Activity Diagram: Alur Student dan Freelancer
 stateDiagram-v2

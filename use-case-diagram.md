@@ -5,7 +5,7 @@
 config:
   layout: elk
   look: neo
-  theme: neo
+  theme: default
 ---
 %% Use Case Diagram for Student & Freelancer Roles - with styled boxes
 

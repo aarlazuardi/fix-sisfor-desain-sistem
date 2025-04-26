@@ -4,7 +4,7 @@
 
 ---
 config:
-  theme: neo
+  theme: default
   look: neo
   layout: elk
 ---
