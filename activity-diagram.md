@@ -1,10 +1,10 @@
 ### Activity Diagram - Alur Umum Pengguna
 
 ```mermaid
-%% Activity Diagram: Alur Mahasiswa dan Freelancer
+%% Activity Diagram: Alur Student dan Freelancer
 stateDiagram-v2
 
-state "Mahasiswa - Buat Assignment" as StudentAssignment {
+state "Student - Buat Assignment" as StudentAssignment {
   [*] --> Login
   Login --> Dashboard
   Dashboard --> CreateAssignment : Click "New Assignment"
@@ -15,7 +15,7 @@ state "Mahasiswa - Buat Assignment" as StudentAssignment {
   ViewAssignment --> [*]
 }
 
-state "Mahasiswa - Kelola Kanban" as StudentKanban {
+state "Student - Kelola Kanban" as StudentKanban {
   [*] --> Dashboard
   Dashboard --> CreateBoard : Click "New Kanban Board"
   CreateBoard --> AddTask : Tambahkan Task
@@ -39,5 +39,4 @@ state "Freelancer - Komentar dan Upload" as FreelancerTask {
   Comment --> Upload : Upload Attachment
   Upload --> [*]
 }
-
 ```
