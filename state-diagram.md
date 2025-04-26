@@ -1,40 +1,52 @@
 ### **State Diagram**
 
 ```mermaid
-stateDiagram
+stateDiagram-v2
+    direction TB
 
-  state Task {
-    [*] --> Created
-    Created --> InProgress : Assigned to user
-    InProgress --> Completed : Task finished
-    Completed --> Archived : Optional archival
-    Completed --> Reopened : Reopen for revision
-    Reopened --> InProgress
-  }
+    [*] --> LoggedOut
 
-  state Assignment {
-    [*] --> NotSubmitted
-    NotSubmitted --> Submitted : Upload tugas
-    Submitted --> Reviewed : Diperiksa oleh dosen
-    Reviewed --> Graded : Dinilai
-    Graded --> ReSubmitted : Direvisi oleh mahasiswa
-    ReSubmitted --> Reviewed
-  }
+    LoggedOut --> LoggingIn : enter credentials
+    LoggingIn --> LoggedIn : success
+    LoggingIn --> LoginFailed : failed
+    LoginFailed --> LoggedOut : retry
 
-  state Project {
-    [*] --> Draft
-    Draft --> Submitted : Project siap dikembangkan
-    Submitted --> Approved : Disetujui oleh admin/client
-    Approved --> Active : Mulai dikerjakan
-    Active --> Completed : Selesai
-    Active --> Cancelled : Dibatalkan
-    Completed --> Archived
-  }
+    LoggedIn --> Mahasiswa
+    LoggedIn --> Freelancer
 
-  state KanbanBoard {
-    [*] --> EmptyBoard
-    EmptyBoard --> InUse : Ada task ditambahkan
-    InUse --> Frozen : Tidak bisa diubah lagi
-    Frozen --> Closed : Proyek selesai
-  }
+    state Mahasiswa {
+        [*] --> Dashboard
+
+        Dashboard --> CreatingProject : new project
+        CreatingProject --> ViewingProject : created
+
+        ViewingProject --> ManagingBoard : open board
+
+        ManagingBoard --> CreatingTask : add task
+        CreatingTask --> TaskCreated : save
+        TaskCreated --> ManagingBoard
+
+        ManagingBoard --> UpdatingTask : edit task
+        UpdatingTask --> TaskUpdated : save
+        TaskUpdated --> ManagingBoard
+
+        ManagingBoard --> DeletingTask : delete task
+        DeletingTask --> TaskDeleted : confirm
+        TaskDeleted --> ManagingBoard
+
+        Dashboard --> LoggingOut : click logout
+        LoggingOut --> LoggedOut
+    }
+
+    state Freelancer {
+        [*] --> ViewingBoard
+
+        ViewingBoard --> TakingTask : take task
+        TakingTask --> DoingTask : accepted
+        DoingTask --> SubmittingTask : complete
+        SubmittingTask --> Done : submit
+
+        ViewingBoard --> LoggingOut : click logout
+        LoggingOut --> LoggedOut
+    }
 ```
