@@ -1,58 +1,96 @@
 ### Sequence Diagram Lengkap untuk Semua Role
 
 ```mermaid
+%% Sequence Diagram Lengkap: Mahasiswa & Freelancer
+
+%% Mahasiswa Membuat Assignment
 sequenceDiagram
-  participant User
-  participant NextAuthClient as NextAuth (Frontend)
-  participant AuthRoute as /api/auth/[...nextauth]
-  participant Session as SessionHandler
-  participant Dashboard
-  participant API_Project as /api/projects
-  participant API_KanbanBoard as /api/kanban/boards
-  participant API_Task as /api/kanban/tasks
-  participant API_Assignment as /api/assignments
-  participant API_User as /api/users/me
-  participant AdminPanel as AdminPanel
-  participant API_Users as /api/users
+  participant Student
+  participant Frontend
+  participant Backend
+  participant Database
 
-  User->>NextAuthClient: Submit login form
-  NextAuthClient->>AuthRoute: Kirim email & password
-  AuthRoute->>Session: Validasi user + generate token
-  Session-->>AuthRoute: Token & Session info
-  AuthRoute-->>NextAuthClient: Berhasil login
+  Student->>Frontend: Login
+  Frontend->>Backend: Kirim kredensial
+  Backend->>Database: Validasi user
+  Database-->>Backend: User valid
+  Backend-->>Frontend: Token login
+  Frontend-->>Student: Tampilkan dashboard
 
-  NextAuthClient->>Dashboard: Redirect ke dashboard sesuai role
+  Student->>Frontend: Klik "Buat Assignment"
+  Frontend->>Student: Tampilkan form
+  Student->>Frontend: Submit form
+  Frontend->>Backend: Kirim data assignment
+  Backend->>Database: Simpan data assignment
+  Database-->>Backend: Konfirmasi
+  Backend-->>Frontend: Assignment berhasil
+  Frontend-->>Student: Redirect ke halaman assignment
 
-  alt Role = Freelancer
-    User->>Dashboard: Klik "Buat Project"
-    Dashboard->>API_Project: POST /api/projects { title, desc }
-    API_Project-->>Dashboard: 201 Created
+%% Mahasiswa Kelola Kanban
+sequenceDiagram
+  participant Student
+  participant Frontend
+  participant Backend
+  participant Database
 
-    User->>Dashboard: Buat Kanban Board
-    Dashboard->>API_KanbanBoard: POST /api/kanban/boards { projectId, title }
-    API_KanbanBoard-->>Dashboard: 201 Created
+  Student->>Frontend: Buat board baru
+  Frontend->>Backend: Kirim data board
+  Backend->>Database: Simpan board
+  Database-->>Backend: OK
+  Backend-->>Frontend: Tampilkan board
 
-    User->>Dashboard: Tambahkan Task ke Board
-    Dashboard->>API_Task: POST /api/kanban/tasks { boardId, title, assignee }
-    API_Task-->>Dashboard: 201 Created
+  Student->>Frontend: Tambah task
+  Frontend->>Backend: Simpan task
+  Backend->>Database: Simpan task ke board
+  Database-->>Backend: OK
+  Backend-->>Frontend: Tampilkan task
 
-  else Role = Student
-    User->>Dashboard: Akses daftar tugas
-    Dashboard->>API_Assignment: GET /api/assignments/user/:userId
-    API_Assignment-->>Dashboard: Daftar assignment
+  Student->>Frontend: Assign user ke task
+  Frontend->>Backend: Simpan assignment
+  Backend->>Database: Simpan ke TaskAssignee
+  Database-->>Backend: OK
 
-    User->>Dashboard: Pilih assignment dan upload tugas
-    Dashboard->>API_Assignment: PATCH /api/assignments/:id
-    API_Assignment-->>Dashboard: Status updated
+%% Freelancer Melihat dan Mengambil Project
+sequenceDiagram
+  participant Freelancer
+  participant Frontend
+  participant Backend
+  participant Database
 
-  else Role = Admin
-    User->>Dashboard: Akses admin panel
-    Dashboard->>AdminPanel: Load panel
+  Freelancer->>Frontend: Login
+  Frontend->>Backend: Kirim kredensial
+  Backend->>Database: Validasi user
+  Database-->>Backend: User valid
+  Backend-->>Frontend: Token login
+  Frontend-->>Freelancer: Dashboard freelancer
 
-    AdminPanel->>API_Users: GET /api/users
-    API_Users-->>AdminPanel: Data semua user
+  Freelancer->>Frontend: Klik "Lihat Project"
+  Frontend->>Backend: Fetch data Project
+  Backend->>Database: Ambil semua project
+  Database-->>Backend: Data project
+  Backend-->>Frontend: Tampilkan project
+  Frontend-->>Freelancer: List project tampil
 
-    AdminPanel->>API_User: PATCH /api/users/role
-    API_User-->>AdminPanel: Role updated
-  end
+%% Freelancer Komentar & Upload
+sequenceDiagram
+  participant Freelancer
+  participant Frontend
+  participant Backend
+  participant Database
+
+  Freelancer->>Frontend: Buka task
+  Frontend->>Backend: Ambil detail task
+  Backend->>Database: Fetch task + komentar
+  Database-->>Backend: Data lengkap
+  Backend-->>Frontend: Tampilkan detail
+
+  Freelancer->>Frontend: Kirim komentar
+  Frontend->>Backend: Simpan komentar
+  Backend->>Database: Insert ke Comment
+  Database-->>Backend: OK
+
+  Freelancer->>Frontend: Upload file
+  Frontend->>Backend: Kirim file
+  Backend->>Database: Simpan ke Attachment
+  Database-->>Backend: OK
 ```

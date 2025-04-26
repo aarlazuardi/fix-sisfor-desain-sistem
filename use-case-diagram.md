@@ -1,42 +1,46 @@
 ### Use Case Diagram
 
-Aktor: Student, Freelancer, Admin
-
 ```mermaid
-classDiagram
-  class Student
-  class Freelancer
-  class Admin
+%% Use Case Diagram for Student & Freelancer Roles
 
-  class "Login" {}
-  class "Lihat Assignment" {}
-  class "Kumpulkan Assignment" {}
-  class "Lihat Dashboard Mahasiswa" {}
+%% Mermaid doesn't have native support for UML use case diagrams,
+%% so we simulate it with graph TD + subgraph and styling
 
-  class "Buat Project" {}
-  class "Buat Board & Task" {}
-  class "Kelola Tugas" {}
-  class "Akses Dashboard Freelancer" {}
+graph TD
+  %% Actors
+  actorStudent(["👩‍🎓 Student"])
+  actorFreelancer(["💼 Freelancer"])
 
-  class "Manajemen User" {}
-  class "Lihat Semua Aktivitas" {}
+  %% Use cases
+  login((Login))
+  signup((Sign Up))
+  manageProfile((Manage Profile))
+  createProject((Create Project))
+  viewProjects((View Projects))
+  createAssignment((Create Assignment))
+  manageBoard((Manage Kanban Board))
+  createTask((Create Task))
+  assignTask((Assign Task))
+  commentTask((Comment on Task))
+  uploadAttachment((Upload Attachment))
+  useTemplate((Use Template))
 
-  Student --> "Login"
-  Student --> "Lihat Assignment"
-  Student --> "Kumpulkan Assignment"
-  Student --> "Lihat Dashboard Mahasiswa"
+  %% Relationships
+  actorStudent --> login
+  actorStudent --> signup
+  actorStudent --> manageProfile
+  actorStudent --> createAssignment
+  actorStudent --> manageBoard
+  actorStudent --> createTask
+  actorStudent --> commentTask
+  actorStudent --> uploadAttachment
+  actorStudent --> useTemplate
 
-  Freelancer --> "Login"
-  Freelancer --> "Buat Project"
-  Freelancer --> "Buat Board & Task"
-  Freelancer --> "Kelola Tugas"
-  Freelancer --> "Akses Dashboard Freelancer"
-
-  Admin --> "Login"
-  Admin --> "Manajemen User"
-  Admin --> "Lihat Semua Aktivitas"
-
-  note for Student "Aktor dengan role 'student'"
-  note for Freelancer "Aktor dengan role 'freelancer'"
-  note for Admin "Aktor dengan role 'admin'"
+  actorFreelancer --> login
+  actorFreelancer --> signup
+  actorFreelancer --> manageProfile
+  actorFreelancer --> viewProjects
+  actorFreelancer --> assignTask
+  actorFreelancer --> commentTask
+  actorFreelancer --> uploadAttachment
 ```

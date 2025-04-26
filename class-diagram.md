@@ -4,13 +4,14 @@
 classDiagram
   class User {
     +String id
-    +String name
-    +String email
-    +String image
-    +String hashedPassword
-    +String role "student | freelancer | admin"
+    +String? name
+    +String? email
+    +String? image
+    +String? hashedPassword
+    +String? role  %% student | freelancer
     +DateTime createdAt
     +DateTime updatedAt
+    +DateTime? emailVerified
   }
 
   class Project {
@@ -18,76 +19,79 @@ classDiagram
     +String title
     +String description
     +DateTime createdAt
+    +DateTime updatedAt
+    +String userId
   }
 
   class Assignment {
     +String id
     +String title
     +String description
-    +DateTime dueDate
-    +String studentId
+    +DateTime deadline
+    +String userId
   }
 
   class KanbanBoard {
     +String id
-    +String title
-    +String description
-    +DateTime createdAt
-    +DateTime updatedAt
-  }
-
-  class KanbanColumn {
-    +String id
-    +String title
-    +Int order
+    +String name
+    +String userId
   }
 
   class KanbanTask {
     +String id
     +String title
     +String description
-    +String priority
-    +DateTime dueDate
-    +DateTime createdAt
-    +DateTime updatedAt
+    +String boardId
+    +String userId
+  }
+
+  class BoardMember {
+    +String id
+    +String userId
+    +String boardId
+  }
+
+  class TaskAssignee {
+    +String id
+    +String taskId
+    +String userId
   }
 
   class Comment {
     +String id
     +String content
-    +DateTime createdAt
+    +String taskId
+    +String userId
   }
 
   class Attachment {
     +String id
-    +String url
-    +String type
+    +String fileUrl
+    +String userId
   }
 
-  class BoardMember {
+  class Template {
     +String id
-    +String role
+    +String title
+    +String content
+    +String userId
   }
 
-  class TaskAssignee {
-    +String id
-  }
-
-  User --> Assignment
   User --> Project
+  User --> Assignment
   User --> KanbanBoard
+  User --> KanbanTask
+  User --> BoardMember
+  User --> TaskAssignee
   User --> Comment
   User --> Attachment
-  User --> TaskAssignee
+  User --> Template
 
-  KanbanBoard --> KanbanColumn
-  KanbanColumn --> KanbanTask
-  KanbanTask --> Comment
-  KanbanTask --> Attachment
-  KanbanTask --> TaskAssignee
+  KanbanBoard --> KanbanTask
   KanbanBoard --> BoardMember
+  KanbanTask --> Comment
+  KanbanTask --> TaskAssignee
   BoardMember --> User
   TaskAssignee --> User
 
-  note for User "role: student, freelancer, admin"
 ```
