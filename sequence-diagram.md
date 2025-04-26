@@ -1,9 +1,8 @@
 ### Sequence Diagram Lengkap untuk Semua Role
 
-```mermaid
-%% Sequence Diagram Lengkap: Mahasiswa & Freelancer
+#### Mahasiswa Membuat Assignment
 
-%% Mahasiswa Membuat Assignment
+```mermaid
 sequenceDiagram
   participant Student
   participant Frontend
@@ -20,13 +19,16 @@ sequenceDiagram
   Student->>Frontend: Klik "Buat Assignment"
   Frontend->>Student: Tampilkan form
   Student->>Frontend: Submit form
-  Frontend->>Backend: Kirim data assignment
-  Backend->>Database: Simpan data assignment
+  Frontend->>Backend: Kirim data Assignment
+  Backend->>Database: Simpan data Assignment
   Database-->>Backend: Konfirmasi
   Backend-->>Frontend: Assignment berhasil
-  Frontend-->>Student: Redirect ke halaman assignment
+  Frontend-->>Student: Redirect ke halaman Assignment
+```
 
-%% Mahasiswa Kelola Kanban
+#### Mahasiswa Mengelola Kanban
+
+```mermaid
 sequenceDiagram
   participant Student
   participant Frontend
@@ -49,8 +51,11 @@ sequenceDiagram
   Frontend->>Backend: Simpan assignment
   Backend->>Database: Simpan ke TaskAssignee
   Database-->>Backend: OK
+```
 
-%% Freelancer Melihat dan Mengambil Project
+#### Freelancer Melihat dan Mengambil Project
+
+```mermaid
 sequenceDiagram
   participant Freelancer
   participant Frontend
@@ -70,8 +75,10 @@ sequenceDiagram
   Database-->>Backend: Data project
   Backend-->>Frontend: Tampilkan project
   Frontend-->>Freelancer: List project tampil
+```
 
-%% Freelancer Komentar & Upload
+#### Freelancer Komentar dan Upload
+```mermaid
 sequenceDiagram
   participant Freelancer
   participant Frontend
