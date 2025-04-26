@@ -1,6 +1,12 @@
 ### Activity Diagram - Alur Umum Pengguna
 
 ```mermaid
+---
+config:
+  layout: elk
+  look: neo
+  theme: neo
+---
 %% Activity Diagram: Alur Student dan Freelancer
 stateDiagram-v2
 
