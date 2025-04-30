@@ -4,45 +4,42 @@
 ---
 config:
   layout: elk
-  look: neo
+  look: classic
   theme: default
 ---
-%% Activity Diagram: Alur Student dan Freelancer
+%% Activity Diagram - Alur Umum Pengguna
 stateDiagram-v2
+    [*] --> Login
+    Login --> RoleSelection : pertama kali login?
+    RoleSelection --> Dashboard : role dipilih (student/freelancer)
+    Login --> Dashboard : sudah pernah pilih role
 
-state "Student - Buat Assignment" as StudentAssignment {
-  [*] --> Login
-  Login --> Dashboard
-  Dashboard --> CreateAssignment : Click "New Assignment"
-  CreateAssignment --> FillForm : Input Title, Description, Deadline
-  FillForm --> SubmitForm : Click "Submit"
-  SubmitForm --> AssignmentCreated : Save to Database
-  AssignmentCreated --> ViewAssignment : Redirect to Assignment Page
-  ViewAssignment --> [*]
-}
+    Dashboard --> ManageProfile : kelola profil
+    Dashboard --> ManageSettings : pengaturan akun
+    Dashboard --> ProjectView
 
-state "Student - Kelola Kanban" as StudentKanban {
-  [*] --> Dashboard
-  Dashboard --> CreateBoard : Click "New Kanban Board"
-  CreateBoard --> AddTask : Tambahkan Task
-  AddTask --> AssignTask : Tambah Penugasan
-  AssignTask --> Save : Simpan Task
-  Save --> [*]
-}
+    ProjectView --> CreateProject
+    ProjectView --> OpenProject
 
-state "Freelancer - Akses Proyek" as FreelancerProject {
-  [*] --> Login
-  Login --> Dashboard
-  Dashboard --> ViewProjects : Klik "Lihat Project"
-  ViewProjects --> ReadProjectDetail : Lihat Detail Project
-  ReadProjectDetail --> AcceptTask : Ambil Task
-  AcceptTask --> [*]
-}
+    OpenProject --> KanbanBoard
+    KanbanBoard --> CreateTask
+    KanbanBoard --> ViewTask
+    ViewTask --> AddComment
+    ViewTask --> UploadAttachment
+    ViewTask --> AssignUser
 
-state "Freelancer - Komentar dan Upload" as FreelancerTask {
-  [*] --> TaskPage
-  TaskPage --> Comment : Tambah Komentar
-  Comment --> Upload : Upload Attachment
-  Upload --> [*]
-}
+    Dashboard --> ViewTemplates
+    Dashboard --> ViewCourses
+
+    ManageProfile --> Dashboard
+    ManageSettings --> Dashboard
+    CreateProject --> ProjectView
+    CreateTask --> KanbanBoard
+    AddComment --> ViewTask
+    UploadAttachment --> ViewTask
+    AssignUser --> ViewTask
+    ViewTemplates --> Dashboard
+    ViewCourses --> Dashboard
+
+    Dashboard --> [*] : logout
 ```

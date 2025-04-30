@@ -3,74 +3,57 @@
 ```mermaid
 ---
 config:
+  look: handDrawn
   layout: elk
-  look: neo
   theme: default
 ---
-%% Use Case Diagram for Student & Freelancer Roles - with styled boxes
+%% Use Case Diagram
+%% Sistem Manajemen Proyek Kolaboratif dengan Role Student & Freelancer
 
-flowchart LR
-  %% Actors with custom styling
-  actorStudent["👩‍🎓 Student"]:::actor
-  actorFreelancer["💼 Freelancer"]:::actor
+%% Aktor: Student & Freelancer tidak berinteraksi satu sama lain dan memiliki fitur yang hampir serupa
+graph LR
+    actorStudent((Student))
+    actorFreelancer((Freelancer))
 
-  %% Add invisible spacing nodes
-  space1[" "]:::invisible
-  space2[" "]:::invisible
+    %% Use Case Utama
+    UC1["Login dan Autentikasi"]
+    UC2["Pilih Role (pertama kali login)"]
+    UC3["Kelola Profil Pengguna"]
+    UC4["Kelola Pengaturan Akun"]
+    UC5["Lihat Dashboard"]
+    UC6["Buat dan Kelola Proyek"]
+    UC7["Buat dan Kelola Kanban Board"]
+    UC8["Tambahkan dan Kelola Task"]
+    UC9["Komentari Task"]
+    UC10["Upload Lampiran"]
+    UC11["Lihat Template"]
+    UC12["Ikuti Course"]
 
-  %% Connect invisible nodes for spacing
-  actorStudent --- space1
-  actorFreelancer --- space2
+    %% Relasi Student
+    actorStudent --> UC1
+    actorStudent --> UC2
+    actorStudent --> UC3
+    actorStudent --> UC4
+    actorStudent --> UC5
+    actorStudent --> UC6
+    actorStudent --> UC7
+    actorStudent --> UC8
+    actorStudent --> UC9
+    actorStudent --> UC10
+    actorStudent --> UC11
+    actorStudent --> UC12
 
-  %% System boundary with added padding
-  subgraph System[" Student-Freelancer Collaboration System "]
-    direction LR
-    %% Common use cases
-    subgraph Common[" Common Functions "]
-      direction TB
-      login["Login"]:::useCase
-      signup["Sign Up"]:::useCase
-      manageProfile["Manage Profile"]:::useCase
-      commentTask["Comment on Task"]:::useCase
-      uploadAttachment["Upload Attachment"]:::useCase
-    end
-
-    %% Add spacing between subgraphs
-    middleSpace1[" "]:::invisible
-    Common --- middleSpace1 --- StudentFunctions
-
-    %% Student specific use cases
-    subgraph StudentFunctions[" Student Functions "]
-      direction TB
-      createAssignment["Create Assignment"]:::useCase
-      manageBoard["Manage Kanban Board"]:::useCase
-      createTask["Create Task"]:::useCase
-      useTemplate["Use Template"]:::useCase
-    end
-
-    %% Add spacing between subgraphs
-    middleSpace2[" "]:::invisible
-    StudentFunctions --- middleSpace2 --- FreelancerFunctions
-
-    %% Freelancer specific use cases
-    subgraph FreelancerFunctions[" Freelancer Functions "]
-      direction TB
-      viewProjects["View Projects"]:::useCase
-      assignTask["Assign Task"]:::useCase
-      createProject["Create Project"]:::useCase
-    end
-  end
-
-  %% Relationships with cleaner layout (using space nodes)
-  space1 --> StudentFunctions
-  space1 --> Common
-
-  space2 --> Common
-  space2 --> FreelancerFunctions
-
-  %% Custom styling
-  classDef actor fill:#f9f,stroke:#333,stroke-width:2px
-  classDef useCase fill:#e1f5fe,stroke:#01579b,stroke-width:1px,rx:10px,ry:10px
-  classDef system fill:#f5f5f5,stroke:#616161,stroke-width:1px,stroke-dasharray: 5 5,padding:15px
-  classDef invisible fill:none,stroke:none,opacity:0
+    %% Relasi Freelancer (identik, karena fitur mirip tapi eksklusif)
+    actorFreelancer --> UC1
+    actorFreelancer --> UC2
+    actorFreelancer --> UC3
+    actorFreelancer --> UC4
+    actorFreelancer --> UC5
+    actorFreelancer --> UC6
+    actorFreelancer --> UC7
+    actorFreelancer --> UC8
+    actorFreelancer --> UC9
+    actorFreelancer --> UC10
+    actorFreelancer --> UC11
+    actorFreelancer --> UC12
 ```
