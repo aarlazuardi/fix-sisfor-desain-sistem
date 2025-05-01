@@ -3,7 +3,6 @@
 ```mermaid
 ---
 config:
-  layout: elk
   theme: default
 ---
 stateDiagram
