@@ -5,190 +5,159 @@
 ---
 config:
   theme: default
-  look: handDrawn
+  look: classic
   layout: elk
 ---
 
 classDiagram
+  direction TB
 
-%%========================
-%% === ENTITAS UTAMA ===
-%%========================
+  class User {
+    +String id
+    +String? name
+    +String? email
+    +String? hashedPassword
+    +String? role // "student" or "freelancer"
+    +DateTime createdAt
+    +DateTime updatedAt
+    +DateTime? emailVerified
+  }
 
-class User {
-  +String id
-  +String? name
-  +String? email
-  +String? image
-  +String? hashedPassword
-  +String? role  %% student | freelancer
-  +DateTime createdAt
-  +DateTime updatedAt
-  +DateTime? emailVerified
-  +UserSettings? settings
-  +Course[] courses
-  +Account[] accounts
-  +Assignment[] assignments
-  +Attachment[] Attachment
-  +BoardMember[] boardMembers
-  +Comment[] comments
-  +KanbanBoard[] boards
-  +KanbanTask[] tasks
-  +Project[] projects
-  +Session[] sessions
-  +TaskAssignee[] TaskAssignee
-  +Template[] templates
-}
+  class Session {
+    +String id
+    +String sessionToken
+    +String userId
+    +DateTime expires
+  }
 
-class Account {
-  +String id
-  +String userId
-  +String type
-  +String provider
-  +String providerAccountId
-  +String? refresh_token
-  +String? access_token
-  +Int? expires_at
-  +String? token_type
-  +String? scope
-  +String? id_token
-  +String? session_state
-}
+  class Assignment {
+    +String id
+    +String title
+    +String? description
+    +String? course
+    +String status // "not-started"
+    +DateTime? dueDate
+    +DateTime createdAt
+    +DateTime updatedAt
+    +String userId
+    +String? kanbanBoardId
+  }
 
-class Session {
-  +String id
-  +String sessionToken
-  +String userId
-  +DateTime expires
-}
+  class KanbanBoard {
+    +String id
+    +String title
+    +String? description
+    +String createdById
+    +DateTime createdAt
+    +DateTime updatedAt
+  }
 
-class Assignment {
-  +String id
-  +String title
-  +String description
-  +String userId
-  +Boolean isCompleted
-  +DateTime createdAt
-  +DateTime updatedAt
-}
+  class BoardMember {
+    +String id
+    +String boardId
+    +String userId
+    +String role
+  }
 
-class Attachment {
-  +String id
-  +String url
-  +String userId
-  +DateTime createdAt
-}
+  class KanbanColumn {
+    +String id
+    +String title
+    +String boardId
+    +Int order
+  }
 
-class BoardMember {
-  +String id
-  +String boardId
-  +String userId
-}
+  class KanbanTask {
+    +String id
+    +String title
+    +String? description
+    +String columnId
+    +String priority
+    +DateTime? dueDate
+    +String createdById
+    +DateTime createdAt
+    +DateTime updatedAt
+    +String[] labels
+  }
 
-class Comment {
-  +String id
-  +String content
-  +String userId
-  +String taskId
-  +DateTime createdAt
-}
+  class TaskAssignee {
+    +String id
+    +String taskId
+    +String userId
+  }
 
-class KanbanBoard {
-  +String id
-  +String title
-  +String? description
-  +String createdById
-  +DateTime createdAt
-  +DateTime updatedAt
-}
+  class Project {
+    +String id
+    +String title
+    +String? description
+    +String clientName
+    +String status
+    +Float budget
+    +DateTime startDate
+    +DateTime endDate
+    +String userId
+    +String assignedTo
+    +DateTime createdAt
+    +DateTime updatedAt
+    +String? kanbanBoardId
+  }
 
-class KanbanTask {
-  +String id
-  +String boardId
-  +String title
-  +String? description
-  +String status
-  +String userId
-  +DateTime createdAt
-  +DateTime updatedAt
-}
+  class Template {
+    +String id
+    +String title
+    +String? description
+    +String category
+    +String userId
+    +DateTime createdAt
+    +DateTime updatedAt
+    +String link
+  }
 
-class Project {
-  +String id
-  +String name
-  +String description
-  +String userId
-  +DateTime createdAt
-  +DateTime updatedAt
-}
+  class UserSettings {
+    +String id
+    +String userId
+    +Boolean emailNotifications
+    +String theme
+    +DateTime createdAt
+    +DateTime updatedAt
+  }
 
-class TaskAssignee {
-  +String id
-  +String taskId
-  +String userId
-}
+  class Course {
+    +String id
+    +String name
+    +String code
+    +String lecturer
+    +String? room
+    +Json schedule
+    +String userId
+    +DateTime createdAt
+    +DateTime updatedAt
+  }
 
-class Template {
-  +String id
-  +String title
-  +String content
-  +String userId
-  +DateTime createdAt
-  +DateTime updatedAt
-}
+  %% Relationships (Associations & Aggregations)
+  User "1" --> "many" Session
+  User "1" --> "many" Assignment
+  User "1" --> "many" KanbanBoard
+  User "1" --> "many" BoardMember
+  User "1" --> "many" KanbanTask
+  User "1" --> "many" Project
+  User "1" --> "many" Template
+  User "1" --> "many" TaskAssignee
+  User "1" --> "1" UserSettings
+  User "1" --> "many" Course
 
-class UserSettings {
-  +String id
-  +Boolean notificationsEnabled
-  +String userId
-}
+  Session "many" --> "1" User
+  Assignment "many" --> "1" User
+  KanbanBoard "1" --> "many" BoardMember
+  KanbanBoard "1" --> "many" KanbanColumn
+  KanbanBoard "many" --> "1" User : createdBy
 
-class Course {
-  +String id
-  +String name
-  +String description
-  +String userId
-}
+  KanbanColumn "1" --> "many" KanbanTask
+  KanbanTask "1" --> "many" TaskAssignee
+  TaskAssignee "many" --> "1" KanbanTask
+  TaskAssignee "many" --> "1" User
 
-%%========================
-%% === RELASI ANTAR KELAS ===
-%%========================
-
-User --> Account : has
-User --> Session : has
-User --> Assignment : creates
-User --> Attachment : uploads
-User --> BoardMember : joins
-User --> Comment : writes
-User --> KanbanBoard : owns
-User --> KanbanTask : creates
-User --> Project : owns
-User --> TaskAssignee : assigned
-User --> Template : creates
-User --> UserSettings : configures
-User --> Course : enrolled
-
-KanbanBoard --> BoardMember : has
-KanbanBoard --> KanbanTask : has
-KanbanTask --> Comment : has
-KanbanTask --> TaskAssignee : has
-
-Assignment --> Attachment : includes
-
-TaskAssignee --> User : references
-TaskAssignee --> KanbanTask : references
-BoardMember --> User : references
-BoardMember --> KanbanBoard : references
-
-Session --> User : belongs to
-Account --> User : belongs to
-Course --> User : belongs to
-UserSettings --> User : belongs to
-Template --> User : created by
-Project --> User : created by
-Comment --> User : authored by
-Comment --> KanbanTask : attached to
-Attachment --> User : uploaded by
-Assignment --> User : assigned to
-
+  Project "many" --> "1" User
+  Template "many" --> "1" User
+  UserSettings "1" --> "1" User
+  Course "many" --> "1" User
 ```

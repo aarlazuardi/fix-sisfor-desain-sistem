@@ -3,57 +3,53 @@
 ```mermaid
 ---
 config:
-  look: handDrawn
-  layout: elk
+  look: classic
   theme: default
 ---
-%% Use Case Diagram
-%% Sistem Manajemen Proyek Kolaboratif dengan Role Student & Freelancer
+%% File: diagrams/useCaseDiagram.md
+%% Mermaid Use Case Diagram
+%% Role bersifat eksklusif: student dan freelancer tidak saling berinteraksi
 
-%% Aktor: Student & Freelancer tidak berinteraksi satu sama lain dan memiliki fitur yang hampir serupa
-graph LR
-    actorStudent((Student))
-    actorFreelancer((Freelancer))
+%% Mermaid doesn't have built-in support for use case, but we use graph as workaround
+graph TB
+  %% External actors
+  UserStudent(Student)
+  UserFreelancer(Freelancer)
 
-    %% Use Case Utama
-    UC1["Login dan Autentikasi"]
-    UC2["Pilih Role (pertama kali login)"]
-    UC3["Kelola Profil Pengguna"]
-    UC4["Kelola Pengaturan Akun"]
-    UC5["Lihat Dashboard"]
-    UC6["Buat dan Kelola Proyek"]
-    UC7["Buat dan Kelola Kanban Board"]
-    UC8["Tambahkan dan Kelola Task"]
-    UC9["Komentari Task"]
-    UC10["Upload Lampiran"]
-    UC11["Lihat Template"]
-    UC12["Ikuti Course"]
+  subgraph Student
+    S1[Login / Register]
+    S2[Select Role: Student]
+    S3[View / Edit Profile]
+    S4[Create & Manage Courses]
+    S5[Create Assignments]
+    S6[Track Assignment Progress]
+    S7[Use Kanban Board for Assignments]
+  end
 
-    %% Relasi Student
-    actorStudent --> UC1
-    actorStudent --> UC2
-    actorStudent --> UC3
-    actorStudent --> UC4
-    actorStudent --> UC5
-    actorStudent --> UC6
-    actorStudent --> UC7
-    actorStudent --> UC8
-    actorStudent --> UC9
-    actorStudent --> UC10
-    actorStudent --> UC11
-    actorStudent --> UC12
+  subgraph Freelancer
+    F1[Login / Register]
+    F2[Select Role: Freelancer]
+    F3[View / Edit Profile]
+    F4[Manage Client Projects]
+    F5[Create Project Tasks]
+    F6[Collaborate via Kanban Boards]
+    F7[Use Templates & Resources]
+  end
 
-    %% Relasi Freelancer (identik, karena fitur mirip tapi eksklusif)
-    actorFreelancer --> UC1
-    actorFreelancer --> UC2
-    actorFreelancer --> UC3
-    actorFreelancer --> UC4
-    actorFreelancer --> UC5
-    actorFreelancer --> UC6
-    actorFreelancer --> UC7
-    actorFreelancer --> UC8
-    actorFreelancer --> UC9
-    actorFreelancer --> UC10
-    actorFreelancer --> UC11
-    actorFreelancer --> UC12
+  %% Use Case Mapping
+  UserStudent --> S1
+  UserStudent --> S2
+  UserStudent --> S3
+  UserStudent --> S4
+  UserStudent --> S5
+  UserStudent --> S6
+  UserStudent --> S7
+
+  UserFreelancer --> F1
+  UserFreelancer --> F2
+  UserFreelancer --> F3
+  UserFreelancer --> F4
+  UserFreelancer --> F5
+  UserFreelancer --> F6
+  UserFreelancer --> F7
 ```

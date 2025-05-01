@@ -7,39 +7,52 @@ config:
   look: classic
   theme: default
 ---
-%% Activity Diagram - Alur Umum Pengguna
-stateDiagram-v2
-    [*] --> Login
-    Login --> RoleSelection : pertama kali login?
-    RoleSelection --> Dashboard : role dipilih (student/freelancer)
-    Login --> Dashboard : sudah pernah pilih role
+flowchart TB
+  %% INIT
+  Start([Start])
+  Login[/User Login/]
+  RoleCheck{Has Selected Role?}
+  SelectRole[/Select Role/]
+  Route[[Route to Dashboard]]
+  RoleSplit{Role == Student?}
 
-    Dashboard --> ManageProfile : kelola profil
-    Dashboard --> ManageSettings : pengaturan akun
-    Dashboard --> ProjectView
+  %% STUDENT BLOCK
+  subgraph Student Flow
+    SC1[/View Courses/]
+    SC2[/Create Course/]
+    SA1[/View Assignments/]
+    SA2[/Create Assignment/]
+    SK1[/Open Assignment Kanban/]
+    SK2[/Update Task Status/]
+    ST1[/Access Settings/]
+    SLogout[/Logout/]
+  end
 
-    ProjectView --> CreateProject
-    ProjectView --> OpenProject
+  %% FREELANCER BLOCK
+  subgraph Freelancer Flow
+    FP1[/View Projects/]
+    FP2[/Create Project/]
+    FT1[/View Tasks/]
+    FT2[/Create Task/]
+    FA1[/Assign Task/]
+    FK1[/Open Kanban Board/]
+    FTmpl[/Use Templates/]
+    FSet[/Access Settings/]
+    FLogout[/Logout/]
+  end
 
-    OpenProject --> KanbanBoard
-    KanbanBoard --> CreateTask
-    KanbanBoard --> ViewTask
-    ViewTask --> AddComment
-    ViewTask --> UploadAttachment
-    ViewTask --> AssignUser
+  %% Flow
+  Start --> Login --> RoleCheck
+  RoleCheck -- No --> SelectRole --> Route
+  RoleCheck -- Yes --> Route
+  Route --> RoleSplit
 
-    Dashboard --> ViewTemplates
-    Dashboard --> ViewCourses
+  %% Student Path
+  RoleSplit -- Yes --> SC1 --> SC2 --> SA1 --> SA2 --> SK1 --> SK2 --> ST1 --> SLogout
 
-    ManageProfile --> Dashboard
-    ManageSettings --> Dashboard
-    CreateProject --> ProjectView
-    CreateTask --> KanbanBoard
-    AddComment --> ViewTask
-    UploadAttachment --> ViewTask
-    AssignUser --> ViewTask
-    ViewTemplates --> Dashboard
-    ViewCourses --> Dashboard
+  %% Freelancer Path
+  RoleSplit -- No --> FP1 --> FP2 --> FT1 --> FT2 --> FA1 --> FK1 --> FTmpl --> FSet --> FLogout
 
-    Dashboard --> [*] : logout
+  SLogout --> End([End])
+  FLogout --> End
 ```
