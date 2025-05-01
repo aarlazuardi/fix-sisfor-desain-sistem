@@ -4,73 +4,92 @@
 ---
 config:
   layout: elk
-  look: classic
   theme: default
 ---
 stateDiagram
-  direction TB
-  state Authenticated {
-    direction TB
-    [*] --> RoleSelection:first login
-    RoleSelection --> DashboardStudent:role == student
-    RoleSelection --> DashboardFreelancer:role == freelancer
-    DashboardStudent --> StudentProfileSettings:update profile
-    StudentProfileSettings --> DashboardStudent
-    DashboardFreelancer --> FreelancerProfileSettings:update profile
-    FreelancerProfileSettings --> DashboardFreelancer
-    DashboardStudent --> Logout
-    DashboardFreelancer --> Logout
-    state DashboardStudent {
-      direction TB
-      ViewingStudentProjects --> CreatingStudentProject:create project
-      CreatingStudentProject --> ViewingStudentProjects
-      ViewingStudentProjects --> OpenStudentBoard:view Kanban board
-      OpenStudentBoard --> CreatingStudentTask:add task
-      CreatingStudentTask --> OpenStudentBoard
-      OpenStudentBoard --> ViewingStudentTask:open task
-      ViewingStudentTask --> StudentCommenting:add comment
-      ViewingStudentTask --> StudentUploading:upload attachment
-      ViewingStudentTask --> StudentAssigning:assign peer
-      StudentCommenting --> ViewingStudentTask
-      StudentUploading --> ViewingStudentTask
-      StudentAssigning --> ViewingStudentTask
-      ViewingStudentProjects --> ViewingStudentCourses:access course
-      ViewingStudentProjects --> ViewingStudentTemplates:use template
-      [*]
-    }
-    state DashboardFreelancer {
-      direction TB
-      [*] --> Idle
-      Idle --> ViewingFreelancerProjects:open freelancer project
-      ViewingFreelancerProjects --> CreatingFreelancerProject:create project
-      CreatingFreelancerProject --> ViewingFreelancerProjects
-      ViewingFreelancerProjects --> OpenFreelancerBoard:view Kanban board
-      OpenFreelancerBoard --> CreatingFreelancerTask:add task
-      CreatingFreelancerTask --> OpenFreelancerBoard
-      OpenFreelancerBoard --> ViewingFreelancerTask:open task
-      ViewingFreelancerTask --> FreelancerCommenting:add comment
-      ViewingFreelancerTask --> FreelancerUploading:upload attachment
-      ViewingFreelancerTask --> FreelancerAssigning:assign peer
-      FreelancerCommenting --> ViewingFreelancerTask
-      FreelancerUploading --> ViewingFreelancerTask
-      FreelancerAssigning --> ViewingFreelancerTask
-      ViewingFreelancerProjects --> ViewingFreelancerCourses:access course
-      ViewingFreelancerProjects --> ViewingFreelancerTemplates:use template
-      Idle
-[*]      ViewingFreelancerProjects
-      CreatingFreelancerProject
-      OpenFreelancerBoard
-      CreatingFreelancerTask
-      ViewingFreelancerTask
-      FreelancerCommenting
-      FreelancerUploading
-      FreelancerAssigning
-      ViewingFreelancerCourses
-      ViewingFreelancerTemplates
-    }
-  }
-  [*] --> Authenticated
-  [*] --> Idle
-  Idle --> ViewingStudentProjects:open student project
-  Logout --> [*]
+  direction LR
+  state StudentStart {
+    direction LR
+    [*] --> StudentDashboard
+    StudentDashboard --> ViewCourses
+    ViewCourses --> AddCourse
+    AddCourse --> ViewCourses
+    StudentDashboard --> ViewAssignments
+    ViewAssignments --> AddAssignment
+    AddAssignment --> ViewAssignments
+    StudentDashboard --> ViewStudentBoard
+    ViewStudentBoard --> AddStudentBoard
+    AddStudentBoard --> ViewStudentBoard
+    ViewStudentBoard --> ViewStudentColumns
+    ViewStudentColumns --> AddStudentColumn
+    AddStudentColumn --> ViewStudentColumns
+    ViewStudentColumns --> ViewStudentTasks
+    ViewStudentTasks --> AddStudentTask
+    AddStudentTask --> ViewStudentTasks
+    StudentDashboard --> ViewStudentTemplates
+    ViewStudentTemplates --> AddStudentTemplate
+    AddStudentTemplate --> ViewStudentTemplates
+    StudentDashboard --> StudentSettings
+    StudentSettings --> StudentDashboard
+    StudentDashboard --> StudentLogout
+    StudentLogout --> [*]
+[*]    StudentDashboard
+    ViewCourses
+    AddCourse
+    ViewAssignments
+    AddAssignment
+    ViewStudentBoard
+    AddStudentBoard
+    ViewStudentColumns
+    AddStudentColumn
+    ViewStudentTasks
+    AddStudentTask
+    ViewStudentTemplates
+    AddStudentTemplate
+    StudentSettings
+    StudentLogout
+[*]  }
+  state FreelancerStart {
+    direction LR
+    [*] --> FreelancerDashboard
+    FreelancerDashboard --> ViewProjects
+    ViewProjects --> AddProject
+    AddProject --> ViewProjects
+    FreelancerDashboard --> ViewFreelancerBoard
+    ViewFreelancerBoard --> AddFreelancerBoard
+    AddFreelancerBoard --> ViewFreelancerBoard
+    ViewFreelancerBoard --> ViewFreelancerColumns
+    ViewFreelancerColumns --> AddFreelancerColumn
+    AddFreelancerColumn --> ViewFreelancerColumns
+    ViewFreelancerColumns --> ViewFreelancerTasks
+    ViewFreelancerTasks --> AddFreelancerTask
+    AddFreelancerTask --> ViewFreelancerTasks
+    FreelancerDashboard --> ViewFreelancerTemplates
+    ViewFreelancerTemplates --> AddFreelancerTemplate
+    AddFreelancerTemplate --> ViewFreelancerTemplates
+    FreelancerDashboard --> FreelancerSettings
+    FreelancerSettings --> FreelancerDashboard
+    FreelancerDashboard --> FreelancerLogout
+    FreelancerLogout --> [*]
+[*]    FreelancerDashboard
+    ViewProjects
+    AddProject
+    ViewFreelancerBoard
+    AddFreelancerBoard
+    ViewFreelancerColumns
+    AddFreelancerColumn
+    ViewFreelancerTasks
+    AddFreelancerTask
+    ViewFreelancerTemplates
+    AddFreelancerTemplate
+    FreelancerSettings
+    FreelancerLogout
+[*]  }
+  [*] --> Login
+  Login --> RoleCheck
+  RoleCheck --> RoleSelection:if user.role == null
+  RoleSelection --> StudentStart:pilih "student"
+  RoleSelection --> FreelancerStart:pilih "freelancer"
+  RoleCheck --> StudentStart:if role == "student"
+  RoleCheck --> FreelancerStart:if role == "freelancer"
 ```
